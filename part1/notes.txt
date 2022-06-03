@@ -74,8 +74,14 @@ call render() method, but bad practice, if a component has props passed to it,
 and props modified, refresh will take that into account even if prop changed
 under component call < />
 when state modified function called, component re-executed as whole and rerendered
+- when component gets re-redered, all of its children too
 
-Event handlers
+Event handlers (function or reference)
+- reference to function to onClick attribute
+- onClick={() => etc.}
+- event handler is supposed to be either a function/fn reference
+and NOT a function call. why? at render it will execute..and loop
+
 
 Philosophy:
 - specialized componenents reused form complex app
