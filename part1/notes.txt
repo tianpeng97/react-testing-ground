@@ -81,7 +81,25 @@ Event handlers (function or reference)
 - onClick={() => etc.}
 - event handler is supposed to be either a function/fn reference
 and NOT a function call. why? at render it will execute..and loop
+- functions that returns a function: very practical if we pass values
+onClick = {hello('world')}
+const hello = (text) => () => {
+    console.log('hello', text)
+}
 
+
+Object spread:
+{...clicks, left: clicks.left + 1} returns all properties of clicks and modify only left
+
+HOOKS:
+- dont call them in loops or conditional expression so they maintain order
+- ONLY DEFINE INSIDE FIRST LEVEL OF COMPONENT
+- if function call as event handler (like setValue), infinite recursion cause
+rendererd, call, state changes so rendered, call, etc.
+
+COMPONENT:
+- don't define components within components. why? impossible to optimize,
+definition of component inside of another => treated as new component every render
 
 Philosophy:
 - specialized componenents reused form complex app
