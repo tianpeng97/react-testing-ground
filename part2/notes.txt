@@ -6,3 +6,4 @@ be defined in components that return li
 <Note key={note.id} /> where Note returns li
 - event.preventDefault() in event handlers prevent page reload
 - event.target is which component triggered event
+- Controlled Components, (ex: controlled input) are states controlled by user input (input, select, textarea)
