@@ -11,3 +11,28 @@ be defined in components that return li
 you can even remove props arg since it's useless here, so in short DONT RELY on
 this.props or this.state TO UPDATE STATE
 - can run json-server using 'npx json-server --port 3001 --watch db.jason
+- dont use XMLHttpRequest for fetching, use fetch method
+- npm install 'name' --save-dev: dev dependency
+- in package.json, define script to run with npm run 'scriptname'
+
+Axios:
+- const promise = axios.get('route')
+
+Promises:
+- WHAT IS PROMISE? object representing the eventual completion or failure or async operation
+- promise can be pending, fulfilled/resolved or rejected/fail
+- to access result of operation represented by the promise, we must
+make an event handler to the promise (then)
+promise.then(reponse => {})
+- response object as parameter contains all info on HTTP GET request (data, status code, headers)
+- fetching THEN rendering component IS PROBLEMATIC, we should place fetching INSIDE App component
+- the then() contains the event handler
+
+Effect-hooks:
+- Effect hooks lets you perform side effects on function components. Data fetching,
+setting up a subscription, and manually changhing the DOM in React components for example
+are side effects
+- renders body first time w/ 0 data fetched => fetch data => update cause rerender
+- effect takes 2 params: function and how often effect is run
+- default run effect after component rendered, but we want only first render...
+so we give second param an empty array [] => means only first render

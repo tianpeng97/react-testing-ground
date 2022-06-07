@@ -1,10 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axio from 'axios'
 import Note from './components/Note'
+import axios from 'axios'
 
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes)
-  const [newNote, setNewNote] = useState('a new note...')
+const App = () => {
+  const [notes, setNotes] = useState([])
+  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+
+  const fetchNotes = () => {
+    axios.get('http://localhost:3001/notes').then((res) => setNotes(res.data))
+  }
+
+  useEffect(fetchNotes, [])
 
   const addNote = (event) => {
     // prevent page reload
