@@ -1,17 +1,21 @@
-import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Phonebook = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 },
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setNewSearch] = useState('')
   const [showAll, setShowAll] = useState(true)
+
+  const fetchPersons = () => {
+    axios.get('http://localhost:3001/persons').then((res) => {
+      console.log(res.data)
+      setPersons(res.data)
+    })
+  }
+
+  useEffect(fetchPersons, [])
 
   const handleNewName = (event) => {
     setNewName(event.target.value)
@@ -70,7 +74,7 @@ const Phonebook = () => {
       </form>
       <h2>Numbers</h2>
       {personsToShow.map((person) => (
-        <p>
+        <p key={person.id}>
           {person.name} {person.number}
         </p>
       ))}

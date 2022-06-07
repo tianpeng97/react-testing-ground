@@ -36,3 +36,6 @@ are side effects
 - effect takes 2 params: function and how often effect is run
 - default run effect after component rendered, but we want only first render...
 so we give second param an empty array [] => means only first render
+
+REST API:
+- provides data for everyone in a machine-readable format
