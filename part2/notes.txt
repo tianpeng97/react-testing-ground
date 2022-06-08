@@ -36,6 +36,14 @@ are side effects
 - effect takes 2 params: function and how often effect is run
 - default run effect after component rendered, but we want only first render...
 so we give second param an empty array [] => means only first render
+- ALSO USED TO TRIGGER EFFECT (FUNCTIONS) WHEN ARRAY DEPENDENCY, ANY OF IT CHANGES
+if empty array, only first render triggers
+- if searching for substrings, cached regExp (new RegExp('word', 'i')) seems to be more fast in most browser,
+else it's indexOf in chrome/edge
 
 REST API:
 - provides data for everyone in a machine-readable format
+
+APIs:
+- create env where variable name starts with REACT_APP_ to get recongnized
+- import using process.env.
