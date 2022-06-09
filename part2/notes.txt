@@ -27,6 +27,9 @@ promise.then(reponse => {})
 - response object as parameter contains all info on HTTP GET request (data, status code, headers)
 - fetching THEN rendering component IS PROBLEMATIC, we should place fetching INSIDE App component
 - the then() contains the event handler
+- returns promise object, but can demand only certain attributes with
+request.then(res => res.data) in service module (for accessing data)
+- IMPORTANT IMPORTANT IMPORTANT: THEN METHOD OF A PROMISE ALSO RETURNS A PROMISE
 
 Effect-hooks:
 - Effect hooks lets you perform side effects on function components. Data fetching,
@@ -47,3 +50,18 @@ REST API:
 APIs:
 - create env where variable name starts with REACT_APP_ to get recongnized
 - import using process.env.
+
+REST:
+- individual data objects are ressources, we can have collection of ressources
+- URL or route notes for collection and notes/3 where 3 id individual ressource
+- get with HTTP GET requests
+- add with HTTP POST where body is data, need also header for content-type
+- *** SERVER GENERATES IDs
+- TO MODIFY: HTTP PATCH request
+- TO REPLACE: HTTP PUT request
+
+Export default:
+- export default { getAll: getAll, update: update } for getAll a function
+
+Faster object definition, not to be confused with object spreading:
+- let temp = {a:a,b:b} === {a,b} if key and values same
