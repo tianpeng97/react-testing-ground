@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import PersonForm from './components/PersonForm'
 import personServices from './services/persons'
 import NumbersList from './components/NumbersList'
+import Notification from './components/Notification'
 
 const Phonebook = () => {
   const [persons, setPersons] = useState([])
@@ -9,6 +10,7 @@ const Phonebook = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setNewSearch] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMsg, setErrorMsg] = useState(null)
 
   const fetchPersons = () => {
     personServices.getAll().then((res) => setPersons(res))
@@ -49,15 +51,28 @@ const Phonebook = () => {
       ) {
         const personObject = { ...personsSameName[0], number: newNumber }
 
-        personServices.update(personToAdd.id, personObject).then((res) => {
-          setPersons(
-            persons.map((person) =>
-              person.id === personToAdd.id ? res : person
+        personServices
+          .update(personToAdd.id, personObject)
+          .then((res) => {
+            setPersons(
+              persons.map((person) =>
+                person.id === personToAdd.id ? res : person
+              )
             )
-          )
-          setNewName('')
-          setNewNumber('')
-        })
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch((err) => {
+            setErrorMsg(
+              `Info of ${personToAdd.name} has already been removed from server.`
+            )
+            setPersons(persons.filter((person) => person.id !== personToAdd.id))
+            setNewName('')
+            setNewNumber('')
+            setTimeout(() => {
+              setErrorMsg(null)
+            }, 5000)
+          })
       }
     } else {
       const personObject = {
@@ -89,6 +104,7 @@ const Phonebook = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMsg} />
       <div>
         filter shown with
         <input onChange={handleSearch} />

@@ -78,6 +78,9 @@ with header and data
 window.confirm:
 - to ask users yes/no question
 
+for error messages:
+can create a component that returns null (no message) or the message
+
 GOOD EXAMPLES:
-- Notebook (course)
+- Notebook (App) (course)
 - Phonebook (me)
