@@ -74,3 +74,10 @@ returns another promise which has to be resolved in a handler-callback (arg is r
 from previous promise)
 - if we are talking about fetching data, first return of promise is always a response object
 with header and data
+
+window.confirm:
+- to ask users yes/no question
+
+GOOD EXAMPLES:
+- Notebook (course)
+- Phonebook (me)

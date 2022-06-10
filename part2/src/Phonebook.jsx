@@ -25,9 +25,11 @@ const Phonebook = () => {
   }
 
   const removePerson = (id) => {
-    const name = persons.filter((person) => person.id === id)
+    const name = persons.filter((person) => person.id === id)[0].name
     if (window.confirm(`Delete ${name}?`)) {
-      personServices.remove(id)
+      personServices
+        .remove(id)
+        .catch((err) => alert(`${name} already deleted from db.`))
       setPersons(persons.filter((person) => person.id !== id))
     }
   }
@@ -35,16 +37,34 @@ const Phonebook = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
 
-    // const person = persons.filter((person) => person.name === newName)
+    const personsSameName = persons.filter((person) => person.name === newName)
+    const isRedundant = personsSameName.length !== 0
 
-    const personObject = {
-      name: newName,
-      number: newNumber,
-    }
+    if (isRedundant) {
+      const personToAdd = personsSameName[0]
+      if (
+        window.confirm(
+          `${personToAdd.name} is already added to the phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const personObject = { ...personsSameName[0], number: newNumber }
 
-    if (persons.find((person) => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+        personServices.update(personToAdd.id, personObject).then((res) => {
+          setPersons(
+            persons.map((person) =>
+              person.id === personToAdd.id ? res : person
+            )
+          )
+          setNewName('')
+          setNewNumber('')
+        })
+      }
     } else {
+      const personObject = {
+        name: newName,
+        number: newNumber,
+      }
+
       personServices.add(personObject).then((res) => {
         setPersons(persons.concat(res))
         setNewName('')
