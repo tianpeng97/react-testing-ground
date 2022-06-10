@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import PersonForm from './components/PersonForm'
 
 const Phonebook = () => {
   const [persons, setPersons] = useState([])
@@ -60,18 +61,14 @@ const Phonebook = () => {
         filter shown with
         <input onChange={handleSearch} />
       </div>
-
-      <form onSubmit={handleSubmit}>
-        <div>
-          name: <input onChange={handleNewName} />
-        </div>
-        <div>
-          number: <input onChange={handleNewNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <h2>Add a new person to phonebook</h2>
+      <PersonForm
+        onSubmit={handleSubmit}
+        newName={newName}
+        handleNewName={handleNewName}
+        newNumber={newNumber}
+        handleNewNumber={handleNewNumber}
+      />
       <h2>Numbers</h2>
       {personsToShow.map((person) => (
         <p key={person.id}>

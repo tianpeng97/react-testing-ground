@@ -19,7 +19,7 @@ Axios:
 - const promise = axios.get('route')
 
 Promises:
-- WHAT IS PROMISE? object representing the eventual completion or failure or async operation
+- WHAT IS PROMISE? object representing the eventual completion or failure of async operation
 - promise can be pending, fulfilled/resolved or rejected/fail
 - to access result of operation represented by the promise, we must
 make an event handler to the promise (then)
@@ -30,6 +30,7 @@ promise.then(reponse => {})
 - returns promise object, but can demand only certain attributes with
 request.then(res => res.data) in service module (for accessing data)
 - IMPORTANT IMPORTANT IMPORTANT: THEN METHOD OF A PROMISE ALSO RETURNS A PROMISE
+- 'then' is handler of successful promise, use 'catch' for rejected promises
 
 Effect-hooks:
 - Effect hooks lets you perform side effects on function components. Data fetching,
@@ -65,3 +66,11 @@ Export default:
 
 Faster object definition, not to be confused with object spreading:
 - let temp = {a:a,b:b} === {a,b} if key and values same
+
+Callbacks:
+- what is called after async operation completed
+- think of it as a promise resolved has to be handled by a callback, which in turn
+returns another promise which has to be resolved in a handler-callback (arg is result
+from previous promise)
+- if we are talking about fetching data, first return of promise is always a response object
+with header and data
