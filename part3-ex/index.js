@@ -7,7 +7,7 @@ app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`)
 })
 
-const phonebook = [
+let phonebook = [
   {
     id: 1,
     name: 'Arto Hellas',
@@ -29,6 +29,32 @@ const phonebook = [
     number: '39-23-6423122',
   },
 ]
+
+const generateId = () => {
+  const maxId = Math.max(...phonebook.map((user) => user.id))
+  return maxId + 1
+}
+
+app.post('/api/persons', (req, res) => {
+  const body = req.body
+
+  if (!body.name || !body.number) {
+    return res.status(400).json({ error: 'missing name or number' })
+  }
+
+  if (phonebook.find((user) => user.name === body.name)) {
+    return res.status(400).json({ error: 'user already in phonebook' })
+  }
+
+  const user = {
+    id: generateId(),
+    name: body.name,
+    number: body.number,
+  }
+
+  phonebook = phonebook.concat(user)
+  res.json(user)
+})
 
 app.get('/api/persons', (req, res) => {
   res.json(phonebook)
