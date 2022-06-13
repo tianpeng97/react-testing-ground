@@ -61,6 +61,16 @@ console.log(`Server running on port ${PORT}`)
 - we use the send method of response object to send a string back to browser and since it's a string, express
   autosets Content-Type header to text/html, defaults also status to 200
 - JSON formatted string is autochanged to application/json
+- use colon, like notes/:id for defining parameters, and we can access id in request object, like request.params.id
+- like with promises, need a way to treat 200 and 404 (response.status(404).end()) requests
+- .status() is used for settings status
+- .end() used for response without sending data
+- .statusMessage = "message" with 404 status (message IN status, not displayed)
+- status 204 no content if returns no data to response
+- app.use(express.json()) to use json-parser, which takes JSON request, transforms it to JS object then attaches it to body of request before sending
+- status 400 is for BAD requests (if for example body has bad content, like no empty values)
+- for the above and ALWAYS REMEMBER, inside handler, RETURN WILL END EXECUTION
+- res.json will JSON.stringify response, but u can also res.send('<html/>')
 
 # Distincting between data object and JSON
 
@@ -70,3 +80,18 @@ console.log(`Server running on port ${PORT}`)
 # Nodemon
 
 - nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application
+
+# RESTful HTTP API, similar to json-server, and how it's understood in web apps
+
+1. singular things, like notes, are resources with its own URL
+2. URL created with name of resource type and ID, like for example /notes/10
+3. URL for entire COLLECTION of all note resources is /notes
+4. we can execute different operations on resources:
+5. interface intended for programmer use
+
+- GET: fetches a single resource (notes/10)
+- GET: fetches all resources in collection (notes)
+- POST: creates a new resource based on the request data (notes)
+- DELETE: removes resource (notes/10)
+- PUT: replaces entire resource with request data (notes/10)
+- PATCH: replaces entire part of resource with request data (notes/10)
