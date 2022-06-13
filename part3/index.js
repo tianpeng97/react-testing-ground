@@ -1,6 +1,13 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 app.use(express.json())
+app.use(cors())
+
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`)
+})
 
 const generateId = () => {
   const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0
@@ -73,9 +80,4 @@ app.delete('/api/notes/:id', (req, res) => {
   notes = notes.filter((note) => note.id !== id)
 
   res.status(204).end()
-})
-
-const PORT = 3001
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`)
 })

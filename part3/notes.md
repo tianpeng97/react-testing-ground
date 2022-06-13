@@ -120,3 +120,8 @@ console.log(`Server running on port ${PORT}`)
 - unknownEndpoint = (request, response) => {
   response.status(404).json({error: 'unknown endpoint'})
   }
+
+# Same origin policy and CORS
+
+- default: js code of application allows communication of same origin, so 3000 !== 3001
+- need to use Node's cors middleware in backend
