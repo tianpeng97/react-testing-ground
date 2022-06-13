@@ -43,3 +43,12 @@ const PORT = 3001
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
 ```
+
+# About dependencies versioning
+
+- Last number is patch
+- Middle is minor
+- First is major
+- ^4.17.2 means versions is AT LEAST 4.17.2, but patch and minor can be larger, major must be same version
+- THE ABOVE ALSO MEANS ALL NEWER VERSIONS IS BACKWARDS COMPATIBLE, our code can use 4.99.175, but 5.0.0 may break
+- update using "npm update"
