@@ -5,3 +5,5 @@ Content-Type: application/json
     "name": "Tian Peng",
     "number": "514"
 }
+###
+DELETE http://localhost:3001/api/persons/5

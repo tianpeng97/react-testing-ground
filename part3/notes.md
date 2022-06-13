@@ -95,3 +95,28 @@ console.log(`Server running on port ${PORT}`)
 - DELETE: removes resource (notes/10)
 - PUT: replaces entire resource with request data (notes/10)
 - PATCH: replaces entire part of resource with request data (notes/10)
+
+# HTTP Request Types Standard: Safety and Idempotence
+
+- Adheres to RESTful principles!
+- Safety: Database should remain unchanged. Get should only retrieve. Response returns existing data.
+- Idempotence: if a request has side-effects (like affects DB), then the result is same regardless of how many times the request is sent
+- GET: safe
+- HEAD: safe: Like GET but only returns status code and response headers, so no body.
+- GET, HEAD, PUT, DELETE except POST: should be IDEMPOTENT
+- POST: NOT SAFE AND NOT IDEMPOTENT
+
+# Middleware
+
+- express json-parser (always first middleware, also before routes)
+- functions used to handle request and response objects
+- can have multiple middlewares in order
+- for requests: takes raw data from request object, parses it into javascript object and assigns it to body
+- for responses:
+- middleware is a function that takes 3 parameters (request, response, next) = requestLogger
+- next() yields control to next middleware
+- app.use(requestLogger)
+- like prev said, define before routes to handle parse routes, else after for non-existent routes
+- unknownEndpoint = (request, response) => {
+  response.status(404).json({error: 'unknown endpoint'})
+  }

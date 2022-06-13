@@ -1,6 +1,22 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 app.use(express.json())
+
+app.use(
+  morgan((tokens, req, res) => {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'),
+      '-',
+      tokens['response-time'](req, res),
+      'ms',
+      JSON.stringify(req.body),
+    ].join(' ')
+  })
+)
 
 const PORT = 3001
 app.listen(PORT, () => {
@@ -80,8 +96,8 @@ app.get('/api/persons/:id', (req, res) => {
   }
 })
 
-app.delete('api/persons/:id', (req, res) => {
-  const id = req.params.id
+app.delete('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id)
   phonebook = phonebook.filter((user) => user.id !== id)
 
   res.status(204).end()
