@@ -52,3 +52,21 @@ console.log(`Server running on port ${PORT}`)
 - ^4.17.2 means versions is AT LEAST 4.17.2, but patch and minor can be larger, major must be same version
 - THE ABOVE ALSO MEANS ALL NEWER VERSIONS IS BACKWARDS COMPATIBLE, our code can use 4.99.175, but 5.0.0 may break
 - update using "npm update"
+
+# Express app
+
+- import express to use as function for server
+- define routes for HTTP GET requests
+- get('/') is GET request to '/' route
+- we use the send method of response object to send a string back to browser and since it's a string, express
+  autosets Content-Type header to text/html, defaults also status to 200
+- JSON formatted string is autochanged to application/json
+
+# Distincting between data object and JSON
+
+- JSON is a string of the data with a specified data format
+- data object would be the array of objects set to notes
+
+# Nodemon
+
+- nodemon will watch the files in the directory in which nodemon was started, and if any files change, nodemon will automatically restart your node application
