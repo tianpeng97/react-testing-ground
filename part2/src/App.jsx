@@ -21,7 +21,7 @@ const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
-  const [errorMsg, setErrorMsg] = useState('some error happened...')
+  const [errorMsg, setErrorMsg] = useState(null)
 
   const fetchNotes = () => {
     noteService.getAll().then((initialNotes) => setNotes(initialNotes))

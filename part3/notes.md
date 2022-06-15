@@ -125,3 +125,65 @@ console.log(`Server running on port ${PORT}`)
 
 - default: js code of application allows communication of same origin, so 3000 !== 3001
 - need to use Node's cors middleware in backend
+
+# Running production build
+
+- build contains directory static, which is a minified version of our js code
+- everything will be compressed into 1 file, including dependencies
+- we should copy build directory to root of backend and configure it so it shows
+  build/index.html as main page (frontend)
+- Express shows static content (index.html and JS) it fetches with middleware "static('build')"
+  where it will check build directory after every HTTP GET request for route so it can return it
+  before checking backend routes
+- since backend and frontend same address, we can use relative URL / as baseURL
+
+# Streamlining deploying of the frontend
+
+- create scripts to build frontend and redeploy on heroku
+
+# Proxies
+
+- add proxies to frontend repo so in dev it redirects calls from 3000->3001, since frontend doesnt manage any routes except /
+
+# MongoDB: document database
+
+- why? lower complexity compared to relational databases
+- database stores collections of BSON documents
+- BSON is binary JSON documents
+- reminder that JSON is plain text format for expressing structured data for many languages
+- use Mongoose as Object Document Mapper so Js object => Mongo documents is easy
+
+# Schema and its matching model
+
+- schema are the start.
+- they map themselves to a Mongo collection and defines the shape that documents can hold within that collection
+- Models are fancy constructors compiled from Schemas, where an instance of a model is a document. models create and read documents from a database. THEY DO THE CRUD OPS in a database
+- const Note = mongoose.model('Note', schema) where
+  Note variable is used for CRUD and model definition for instanciation
+- Note is singular name of model, mongoose transforms it so collection is named plural (notes).
+- MONGO SCHEMALESS, documents can have different fields in same collection, but mongoose gives it a schema at the level of the app
+
+# CRUD
+
+- create:note = new Note({object}), note.save().then(resulte => {}), mongoose.connection.close()
+- read: Note.find({}) to retrieve objects with conditions and returns a promise to treat with handler
+
+# Mongoose formatting (format only for frontend)
+
+- We can format the objects returned by mongoose by creating toJSON method, used on all instances of the models produced with that schema
+- JSON.stringify will call toJSON method on all objects
+- response will give out JSON formatted
+
+```
+noteSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+```
+
+# Models directory
+
+- mongoose logic, so module.exports = Note model for note.js
