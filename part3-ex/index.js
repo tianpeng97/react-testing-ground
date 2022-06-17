@@ -1,6 +1,8 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
+const Person = require('./models/person')
 const app = express()
 app.use(cors())
 app.use(express.static('build'))
@@ -26,34 +28,6 @@ app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`)
 })
 
-let phonebook = [
-  {
-    id: 1,
-    name: 'Arto Hellas',
-    number: '040-123456',
-  },
-  {
-    id: 2,
-    name: 'Ada Lovelace',
-    number: '39-44-5323523',
-  },
-  {
-    id: 3,
-    name: 'Dan Abramov',
-    number: '12-43-234345',
-  },
-  {
-    id: 4,
-    name: 'Mary Poppendieck',
-    number: '39-23-6423122',
-  },
-]
-
-const generateId = () => {
-  const maxId = Math.max(...phonebook.map((user) => user.id))
-  return maxId + 1
-}
-
 app.post('/api/persons', (req, res) => {
   const body = req.body
 
@@ -61,24 +35,23 @@ app.post('/api/persons', (req, res) => {
     return res.status(400).json({ error: 'missing name or number' })
   }
 
-  if (phonebook.find((user) => user.name === body.name)) {
-    return res.status(400).json({ error: 'user already in phonebook' })
-  }
-
-  const user = {
-    id: generateId(),
+  const person = new Person({
     name: body.name,
     number: body.number,
-  }
+  })
 
-  phonebook = phonebook.concat(user)
-  res.json(user)
+  person.save().then((saved) => {
+    res.json(saved)
+  })
 })
 
 app.get('/api/persons', (req, res) => {
-  res.json(phonebook)
+  Person.find({}).then((persons) => {
+    res.json(persons)
+  })
 })
 
+// TODO
 app.get('/info', (req, res) => {
   const date = new Date()
   const response = `
@@ -89,16 +62,16 @@ app.get('/info', (req, res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const user = phonebook.find((user) => user.id === id)
-
-  if (user) {
-    res.json(user)
-  } else {
-    res.status(404).end()
-  }
+  Person.findById(req.params.id)
+    .then((person) => {
+      res.json(person)
+    })
+    .catch((error) => {
+      res.status(404).end()
+    })
 })
 
+// TODO
 app.delete('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
   phonebook = phonebook.filter((user) => user.id !== id)

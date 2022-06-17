@@ -2,9 +2,11 @@
 
 - position items in 2d with grid-row-start and grid-column-start
 - can ORDER layouts (from left->right, top->bot) lower order goes first
+- order? if water is declared before poison -> water poison appearance, order: int changes that
 
 # display: grid;
 
+- grid-area AND grid-template (must also have display:grid)
 - grid-template-columns: 20% 20% 20% 20% 20%; OR repeat(5, 20%)
 - can use fr => 1fr + 3fr = 4fr to 1/4 and 3/4
 - if you use px,%,ems with fr, first it will prio px,ems,% then use remaining space for fr
@@ -14,7 +16,7 @@
 - you can swap to end to start, but the left-most cell is inclusive and right-most is exclusive
 - CAREFUL WITH NEGATIVE VALUES, -1 specifies last cell, but the exclusive rule doesnt apply to it, so have to use -2 (for example)
 - so left->right:[,[;inc,ex;start;end
-- right->left:],];exlusive, inc
+- right->left:],];exlusive, inc, start,end
 - negative left->right:],] reverse of non-negative
 - if split, so left->right:+,-, then [,]
 - can also signify how many cells to span in end: span 2;

@@ -166,7 +166,9 @@ console.log(`Server running on port ${PORT}`)
 # CRUD
 
 - create:note = new Note({object}), note.save().then(resulte => {}), mongoose.connection.close()
-- read: Note.find({}) to retrieve objects with conditions and returns a promise to treat with handler
+- read: Note.find({}) to retrieve objects with conditions and returns a promise to treat with handler. note that this returns NULL and not an error if nothing found. can also findById()
+- update: findByIdAndUpdate(id, JS object, {new: true}) where the new:true means the handler is passed updated note and NOT the original
+- delete: findByIdAndRemove (NOT DELETE)
 
 # Mongoose formatting (format only for frontend)
 
@@ -187,3 +189,40 @@ noteSchema.set('toJSON', {
 # Models directory
 
 - mongoose logic, so module.exports = Note model for note.js
+
+# Status codes:
+
+- 204 no content (after deletion)
+- 400 bad request (do not repeat request either cuz syntax eror or else)
+- 404 not found
+- 500 internal server error
+
+# Error handling:
+
+- handler of request promise has 3 args (request, response, next) where next(error) moves execution to error handler middleware
+- express error handlers are middleware that take 4 params (error, request, response, next)
+
+```
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({error: 'malformatted id'})
+  }
+
+  next(error)
+}
+
+// last loaded middleware
+app.use(errorHandler)
+```
+
+# Order of middleware!!!
+
+1. cors
+2. static build
+3. json-parser or any parser
+4. requestLogger such as morgan
+5. define routes
+6. unknown endpoints (req,res) handler
+7. error handler (error, req, res, next)
