@@ -60,7 +60,7 @@ app.put('/api/notes/:id', (req, res, next) => {
     important: body.important,
   }
 
-  Note.findByIdAndUpdate(request.params.id, note, { new: True })
+  Note.findByIdAndUpdate(request.params.id, note, { new: true })
     .then((updatedNote) => {
       res.json(updatedNote)
     })
