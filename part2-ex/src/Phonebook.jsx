@@ -62,13 +62,15 @@ const Phonebook = () => {
             setNewName('')
             setNewNumber('')
           })
-          .catch((err) => {
-            setErrorMsg(
-              `Info of ${personToAdd.name} has already been removed from server.`
-            )
-            setPersons(persons.filter((person) => person.id !== personToAdd.id))
-            setNewName('')
-            setNewNumber('')
+          .catch((error) => {
+            // TODO person to update already deleted
+
+            // console.log(error.name)
+            // setErrorMsg(`[ERROR] ${personToAdd.name} error`)
+            setErrorMsg(`[ERROR] ${error.response.data.error}`)
+            // setPersons(persons.filter((person) => person.id !== personToAdd.id))
+            // setNewName('')
+            // setNewNumber('')
             setTimeout(() => {
               setErrorMsg(null)
             }, 5000)
@@ -80,11 +82,19 @@ const Phonebook = () => {
         number: newNumber,
       }
 
-      personServices.add(personObject).then((res) => {
-        setPersons(persons.concat(res))
-        setNewName('')
-        setNewNumber('')
-      })
+      personServices
+        .add(personObject)
+        .then((res) => {
+          setPersons(persons.concat(res))
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch((error) => {
+          setErrorMsg(`[ERROR] ${error.response.data.error}`)
+          setTimeout(() => {
+            setErrorMsg(null)
+          }, 5000)
+        })
     }
   }
 
@@ -102,7 +112,7 @@ const Phonebook = () => {
     : persons.filter((person) => person.name.toLowerCase().includes(newSearch))
 
   return (
-    <div>
+    <div className="container">
       <h2>Phonebook</h2>
       <Notification message={errorMsg} />
       <div>

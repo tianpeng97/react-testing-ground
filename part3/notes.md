@@ -226,3 +226,13 @@ app.use(errorHandler)
 5. define routes
 6. unknown endpoints (req,res) handler
 7. error handler (error, req, res, next)
+
+# Data validation in Mongoose
+
+- in the schema define object {type, minLength, required} for each field
+- can create custom validators (like minLength and required)
+- `error.name = ValidationError`
+- also `CastError` if malformatted ID
+- validations DO NOT WORK WITH `findOneAndUpdate` and all `find+update`
+- solution: add `runValidators:true` property to options, also `context:'query'`
+- Validation error in backend json sends `error:'message'`, can pick up in frontend with error.`response.data.error`

@@ -1,3 +1,20 @@
+html {
+  background-color: #036ffc;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+}
+
+.container {
+  background-color: white;
+  color: black;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
 .error {
   color: red;
   background: lightgray;
@@ -6,4 +23,11 @@
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

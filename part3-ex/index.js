@@ -30,13 +30,7 @@ app.listen(PORT, () => {
 })
 
 app.post('/api/persons', (req, res, next) => {
-  const body = req.body
-  const name = body.name
-  const number = body.number
-
-  if (!name || !number) {
-    return res.status(400).json({ error: 'missing name or number' })
-  }
+  const { name, number } = req.body
 
   // new person
   const person = new Person({
@@ -86,11 +80,18 @@ app.get('/api/persons/:id', (req, res, next) => {
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
-  Person.findByIdAndUpdate(req.params.id, req.body, { new: true })
+  Person.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+    context: 'query',
+  })
     .then((person) => {
       res.json(person)
     })
-    .catch((error) => next(error))
+    .catch((error) => {
+      console.log('no number')
+      return next(error)
+    })
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
@@ -109,6 +110,13 @@ app.use(unknownEndpoint)
 
 const errorHandler = (error, req, res, next) => {
   console.error(error.message)
+
+  switch (error.name) {
+    case 'CastError':
+      return res.status(400).json({ error: 'Malformatted ID' })
+    case 'ValidationError':
+      return res.status(400).json({ error: error.message })
+  }
 
   next(error)
 }

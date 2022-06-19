@@ -13,10 +13,10 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
 })
 
-app.post('/api/notes', (req, res) => {
+app.post('/api/notes', (req, res, next) => {
   const body = req.body
 
-  if (!body.content) {
+  if (body.content === undefined) {
     return res.status(400).json({
       error: 'content missing',
     })
@@ -28,10 +28,13 @@ app.post('/api/notes', (req, res) => {
     date: new Date(),
   })
 
-  note.save().then((savedNote) => {
-    // formatted using toJSON method
-    res.json(savedNote)
-  })
+  note
+    .save()
+    .then((savedNote) => {
+      // formatted using toJSON method
+      res.json(savedNote)
+    })
+    .catch((error) => next(error))
 })
 
 app.get('/api/notes', (req, res) => {
@@ -53,14 +56,13 @@ app.get('/api/notes/:id', (req, res, next) => {
 })
 
 app.put('/api/notes/:id', (req, res, next) => {
-  const body = request.body
+  const { content, important } = request.body
 
-  const note = {
-    content: body.content,
-    important: body.important,
-  }
-
-  Note.findByIdAndUpdate(request.params.id, note, { new: true })
+  Note.findByIdAndUpdate(
+    request.params.id,
+    { content, important },
+    { new: true, runValidators: true, context: 'query' }
+  )
     .then((updatedNote) => {
       res.json(updatedNote)
     })
@@ -85,8 +87,13 @@ app.use(unknownEndpoint)
 const errorHandler = (error, req, res, next) => {
   console.error(error.message)
 
-  if (error.name === 'CastError') {
-    return res.status(400).send({ error: 'malformatted id' })
+  switch (error.name) {
+    case 'CastError':
+      return res.status(400).send({ error: 'malformatted id' })
+    case 'ValidationError':
+      return res.status(400).json({ error: error.message })
+    default:
+      break
   }
 
   next(error)
