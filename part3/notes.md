@@ -236,3 +236,19 @@ app.use(errorHandler)
 - validations DO NOT WORK WITH `findOneAndUpdate` and all `find+update`
 - solution: add `runValidators:true` property to options, also `context:'query'`
 - Validation error in backend json sends `error:'message'`, can pick up in frontend with error.`response.data.error`
+
+# Lint
+
+- init: `npx eslint --init`
+- tool that detects and flasgs error in programming languages
+- ESlint for static analysis (examining source code before run, typically a set of code against sets of coding rules)
+- inspection: `npx eslint index.js` or run script `"lint": "eslint ."`
+- .eslintignore has build directory
+- set value of configuration at 0 to disable rule
+
+# Linting rules
+
+- `eqeqeq: 'error'` equality needs triple
+- `no-trailing-spaces: 'error'` no whitespace at EOL
+- `objects-curly-spacing: ['error','always']` space{}space
+- `arrow-spacing: ['error', {'before':true,'after':true}]` space=>space

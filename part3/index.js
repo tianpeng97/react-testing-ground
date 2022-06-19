@@ -56,22 +56,22 @@ app.get('/api/notes/:id', (req, res, next) => {
 })
 
 app.put('/api/notes/:id', (req, res, next) => {
-  const { content, important } = request.body
+  const { content, important } = req.body
 
   Note.findByIdAndUpdate(
-    request.params.id,
+    req.params.id,
     { content, important },
     { new: true, runValidators: true, context: 'query' }
   )
     .then((updatedNote) => {
       res.json(updatedNote)
     })
-    .catch((err) => next)
+    .catch((err) => next(err))
 })
 
 app.delete('/api/notes/:id', (req, res, next) => {
-  Note.findByIdAndRemove(request.params.id)
-    .then((result) => {
+  Note.findByIdAndRemove(req.params.id)
+    .then(() => {
       res.status(204).end()
     })
     .catch((err) => next(err))
