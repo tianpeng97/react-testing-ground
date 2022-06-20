@@ -219,9 +219,9 @@ app.use(errorHandler)
 
 # Order of middleware!!!
 
-1. cors
-2. static build
-3. json-parser or any parser
+1. `cors()`
+2. `app.use(express.static('build'))`
+3. `app.use(express.json())` or any parser
 4. requestLogger such as morgan
 5. define routes
 6. unknown endpoints (req,res) handler
@@ -252,3 +252,60 @@ app.use(errorHandler)
 - `no-trailing-spaces: 'error'` no whitespace at EOL
 - `objects-curly-spacing: ['error','always']` space{}space
 - `arrow-spacing: ['error', {'before':true,'after':true}]` space=>space
+
+# Project structure
+
+```
+├── index.js
+├── app.js
+├── build
+│   └── ...
+├── controllers
+│   └── notes.js
+├── models
+│   └── note.js
+├── package-lock.json
+├── package.json
+├── utils
+│   ├── config.js
+│   ├── logger.js
+│   └── middleware.js
+```
+
+- console interractions in its own utils/logger.js
+- index.js gets simplified:
+
+```
+const app = require('./app') // the actual Express application
+const http = require('http')
+const config = require('./utils/config')
+const logger = require('./utils/logger')
+
+const server = http.createServer(app)
+
+server.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`)
+})
+```
+
+- dedicated notes route handler (the base is /api/notes):
+
+```
+onst notesRouter = require('express').Router()
+const Note = require('../models/note')
+
+notesRouter.get('/', (request, response) => {
+  ...
+}
+```
+
+- in actual app, with `app.use('/api/notes', notesRouter)`, the route is only used if request url starts with what we defined
+
+# In summary...
+
+- `index.js`: to import actual express app and create http server to listen to port and to start it
+- `utils/config.js`: handling of env vars to export vars
+- `controllers/notes.js`: notes route handlers also referred to as controllers where we create an `notesRouter = require('express').Router()` to export notesRouter. so we define all routes in router object (middleware) that can perform only middleware and routing functions
+- `app.js`: creates actual app using all the above. begins with connecting to database, app.use() all ordered modules and exports itself
+- `utils/middleware.js`: custom middlewares used by app, like requestLogger, unknownEndpoint and errorHandler
+- `models/note.js`: ONLY defines Mongoose schema and export as model
