@@ -8,17 +8,38 @@ const PersonForm = ({
   handleNewNumber,
 }) => {
   return (
-    <form onSubmit={onSubmit}>
-      <div>
-        name: <input value={newName} onChange={handleNewName} />
-      </div>
-      <div>
-        number: <input value={newNumber} onChange={handleNewNumber} />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
+    <div className="person-form">
+      <h2 className="center-title">Add new person</h2>
+      <form className="form-content" onSubmit={onSubmit}>
+        <div className="form-input">
+          <div className="form-floating">
+            <input
+              id="name"
+              className="form-control input"
+              value={newName}
+              onChange={handleNewName}
+              placeholder=""
+            />
+            <label htmlFor="name">Name</label>
+          </div>
+          <div className="form-floating">
+            <input
+              id="number"
+              className="form-control input"
+              value={newNumber}
+              onChange={handleNewNumber}
+              placeholder=""
+            />
+            <label htmlFor="number">Number</label>
+          </div>
+        </div>
+        <div className="form-submit">
+          <button className="form-submit-button" type="submit">
+            Add
+          </button>
+        </div>
+      </form>
+    </div>
   )
 }
 

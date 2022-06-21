@@ -3,6 +3,8 @@ import PersonForm from './components/PersonForm'
 import personServices from './services/persons'
 import NumbersList from './components/NumbersList'
 import Notification from './components/Notification'
+import Footer from './components/Footer'
+import loginService from './services/login'
 
 const Phonebook = () => {
   const [persons, setPersons] = useState([])
@@ -11,12 +13,46 @@ const Phonebook = () => {
   const [newSearch, setNewSearch] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMsg, setErrorMsg] = useState(null)
+  const [username, setUserame] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      })
+      window.localStorage.setItem('loggedPhonebookUser', JSON.stringify(user))
+      personServices.setToken(user.token)
+      setUser(user)
+      setUserame('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMsg('Wrong credentials')
+      setTimeout(() => {
+        setErrorMsg(null)
+      }, 5000)
+    }
+  }
 
   const fetchPersons = () => {
     personServices.getAll().then((res) => setPersons(res))
   }
 
+  const checkToken = () => {
+    const loggedUserJSON = window.localStorage.getItem('loggedPhonebookUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      personServices.setToken(user.token)
+    }
+  }
+
   useEffect(fetchPersons, [])
+  useEffect(checkToken, [])
 
   const handleNewName = (event) => {
     setNewName(event.target.value)
@@ -111,25 +147,77 @@ const Phonebook = () => {
     ? persons
     : persons.filter((person) => person.name.toLowerCase().includes(newSearch))
 
+  const handleUsername = (event) => {
+    setUserame(event.target.value)
+  }
+
+  const handlePassword = (event) => {
+    setPassword(event.target.value)
+  }
+
+  const loginForm = () => {
+    return (
+      <form onSubmit={handleLogin}>
+        <div>
+          username
+          <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={handleUsername}
+          ></input>
+        </div>
+        <div>
+          password
+          <input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={handlePassword}
+          ></input>
+        </div>
+        <button type="submit">Login</button>
+      </form>
+    )
+  }
+
+  const phonebookForm = () => {
+    return (
+      <>
+        <div className="form-floating">
+          <input
+            className="form-control input"
+            id="search"
+            placeholder=""
+            onChange={handleSearch}
+          />
+          <label htmlFor="search">Search</label>
+        </div>
+        <PersonForm
+          onSubmit={handleSubmit}
+          newName={newName}
+          handleNewName={handleNewName}
+          newNumber={newNumber}
+          handleNewNumber={handleNewNumber}
+        />
+        <h2>Numbers</h2>
+        <NumbersList
+          personsToShow={personsToShow}
+          removePerson={removePerson}
+        />
+      </>
+    )
+  }
+
   return (
-    <div className="container">
-      <h2>Phonebook</h2>
-      <Notification message={errorMsg} />
-      <div>
-        filter shown with
-        <input onChange={handleSearch} />
+    <>
+      <div className="container">
+        <h2>Phonebook</h2>
+        <Notification message={errorMsg} />
+        {user === null ? loginForm() : phonebookForm()}
       </div>
-      <h2>Add a new person to phonebook</h2>
-      <PersonForm
-        onSubmit={handleSubmit}
-        newName={newName}
-        handleNewName={handleNewName}
-        newNumber={newNumber}
-        handleNewNumber={handleNewNumber}
-      />
-      <h2>Numbers</h2>
-      <NumbersList personsToShow={personsToShow} removePerson={removePerson} />
-    </div>
+      <Footer />
+    </>
   )
 }
 

@@ -169,6 +169,7 @@ console.log(`Server running on port ${PORT}`)
 - read: Note.find({}) to retrieve objects with conditions and returns a promise to treat with handler. note that this returns NULL and not an error if nothing found. can also findById()
 - update: findByIdAndUpdate(id, JS object, {new: true}) where the new:true means the handler is passed updated note and NOT the original
 - delete: findByIdAndRemove (NOT DELETE)
+- uniqueness: `User.findOne({username})`
 
 # Mongoose formatting (format only for frontend)
 
@@ -194,6 +195,7 @@ noteSchema.set('toJSON', {
 
 - 204 no content (after deletion)
 - 400 bad request (do not repeat request either cuz syntax eror or else)
+- 401 unauthorized
 - 404 not found
 - 500 internal server error
 
@@ -309,3 +311,31 @@ notesRouter.get('/', (request, response) => {
 - `app.js`: creates actual app using all the above. begins with connecting to database, app.use() all ordered modules and exports itself
 - `utils/middleware.js`: custom middlewares used by app, like requestLogger, unknownEndpoint and errorHandler
 - `models/note.js`: ONLY defines Mongoose schema and export as model
+
+# What Mongo can't do really...
+
+- uniqueness check
+- table joins (uses multiple queries)
+- foreign keys and references (mongoose does it with populate, BUT DATABASE DOES NOT KNOW THERE IS REFERENCE)
+- dangerous joins!!! relation is transactional so state does not change during query, mongoose can change collections state during query! (populate method is given the field that references other foreign objects, must be array or single ObjectId, can have options of display (1 is true))
+
+# Password hash
+
+- reminder that REST conventions means dealing with users needs to have its own router to that types of ressource
+- require `bcrypt`
+- bcrypt.hash(salt,pass)
+- bcrypt.compare(pass, user.hash)
+- saltAmount
+
+# Token authentification
+
+- require jsonwebtoken for generation
+- token takes {username, id} using jwt.sign(object,secret)
+- Auhtorization header to send tokens
+- auth schemes tells how credentials are interpreted, we use `Bearer thisisatoken`
+- jwt.verify(token,secret)
+- getTokenFrom that we create is method to isolate token from authorization header
+- IF MULTIPLE INTERFACES FOR IDENTIFICATION => JWT validation becomes its own middleware (or use express-jwt)
+- careful that REACT API HOLDS TOKEN A LOOOOONG TIME, HAVE TO SET VALIDITY PERIOD
+- `const token = jwt.sign(userForToken, process.env.SECRET, {expiresIn: 60 * 60})`
+- to prevent loss after rerendering page, use local browser storage {key:value} DB using `window.localStorage.setItem('name','x')` and getting window.`localStorage.getItem('name')` with also `removeItem`. NEEDS TO BE DOMstrings

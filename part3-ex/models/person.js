@@ -11,6 +11,10 @@ const personSchema = new mongoose.Schema({
       message: (props) => `${props.value} not valid number`,
     },
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 })
 
 personSchema.set('toJSON', {

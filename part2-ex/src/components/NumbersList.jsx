@@ -3,11 +3,20 @@ import Person from './Person'
 
 const NumbersList = ({ personsToShow, removePerson }) => {
   return (
-    <ul>
-      {personsToShow.map((person) => (
-        <Person key={person.id} person={person} removePerson={removePerson} />
-      ))}
-    </ul>
+    <table className="phonebook">
+      <thead>
+        <tr className="phonebook-header">
+          <th className="phonebook-entry">Name</th>
+          <th className="phonebook-entry">Number</th>
+          <th className="phonebook-entry">Options</th>
+        </tr>
+      </thead>
+      <tbody className="phonebook-body">
+        {personsToShow.map((person) => (
+          <Person key={person.id} person={person} removePerson={removePerson} />
+        ))}
+      </tbody>
+    </table>
   )
 }
 

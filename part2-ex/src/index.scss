@@ -1,3 +1,5 @@
+$primaryColor: #036ffc;
+
 html,
 body {
   margin: 0;
@@ -5,8 +7,8 @@ body {
 }
 
 html {
-  background-color: #036ffc;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: $primaryColor;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: white;
 }
 
@@ -17,7 +19,7 @@ html {
 .container {
   background-color: white;
   color: black;
-  width: 50vw;
+  width: 70vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -51,7 +53,7 @@ html {
 }
 
 .form-submit-button {
-  border-color: #036ffc;
+  border-color: $primaryColor;
   background-color: white;
   color: black;
   width: 100%;
@@ -59,10 +61,11 @@ html {
   height: 100%;
   transition-duration: 0.4s;
   border-radius: 10px;
-}
-.form-submit-button:hover {
-  background-color: #036ffc;
-  color: white;
+
+  &:hover {
+    background-color: $primaryColor;
+    color: white;
+  }
 }
 
 .error {
@@ -116,20 +119,24 @@ html {
 
 .phonebook-header {
   width: 100%;
-  background-color: #036ffc;
+  background-color: $primaryColor;
   color: white;
   text-align: left;
 }
 
-.phonebook-row:hover {
-  background-color: #036ffc;
-  color: white;
-}
-.phonebook-row:hover .options {
-  color: white;
-}
-.phonebook-row:hover .options:hover {
-  color: red;
+.phonebook-row {
+  &:hover {
+    background-color: $primaryColor;
+    color: white;
+
+    .options {
+      color: white;
+
+      &:hover {
+        color: red;
+      }
+    }
+  }
 }
 
 #root {
@@ -139,4 +146,4 @@ html {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-}/*# sourceMappingURL=index.css.map */
+}
