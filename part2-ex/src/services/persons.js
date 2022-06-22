@@ -7,9 +7,12 @@ const setToken = (newToken) => {
   token = `bearer ${newToken}`
 }
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then((res) => res.data)
+const getAll = async () => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  const res = await axios.get(baseUrl, config)
+  return res.data
 }
 
 const add = async (newPerson) => {

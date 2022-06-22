@@ -51,7 +51,7 @@ const Phonebook = () => {
     }
   }
 
-  useEffect(fetchPersons, [])
+  useEffect(fetchPersons, [user])
   useEffect(checkToken, [])
 
   const handleNewName = (event) => {

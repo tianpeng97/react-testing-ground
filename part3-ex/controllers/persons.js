@@ -37,11 +37,25 @@ personsRouter.post('/', async (req, res) => {
 })
 
 personsRouter.get('/', async (req, res) => {
-  const persons = await Person.find({}).populate('user', {
-    username: 1,
-    name: 1,
-  })
-  res.json(persons)
+  const token = getTokenFrom(req)
+  let decodedToken
+  if (token) {
+    decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!decodedToken.id) {
+      return res.status(401).json({ error: 'Token missing or invalid.' })
+    }
+
+    const persons = await Person.find({ user: decodedToken.id }).populate(
+      'user',
+      {
+        username: 1,
+        name: 1,
+      }
+    )
+    res.json(persons)
+  } else {
+    res.json([])
+  }
 })
 
 personsRouter.get('/:id', (req, res, next) => {
