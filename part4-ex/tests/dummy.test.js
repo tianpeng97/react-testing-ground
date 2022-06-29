@@ -103,3 +103,13 @@ describe('favorite blog', () => {
     })
   })
 })
+
+describe('top bloggers', () => {
+  test('of big list is accurate', () => {
+    const result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3,
+    })
+  })
+})

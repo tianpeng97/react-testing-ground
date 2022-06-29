@@ -1,6 +1,4 @@
-const dummy = (blogs) => {
-  return 1
-}
+const _ = require('lodash')
 
 const totalLikes = (blogs) => {
   const reducer = (previousValue, currentValue) =>
@@ -26,4 +24,14 @@ const favoriteBlog = (blogs) => {
   return result
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog }
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) {
+    return undefined
+  }
+
+  const result = _(blogs).countBy('author').toPairs().maxBy(_.last)
+
+  return { author: result[0], blogs: result[1] }
+}
+
+module.exports = { totalLikes, favoriteBlog, mostBlogs }
