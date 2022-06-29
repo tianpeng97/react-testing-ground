@@ -25,13 +25,27 @@ const favoriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => {
-  if (blogs.length === 0) {
-    return undefined
-  }
+  if (blogs.length === 0) return undefined
 
-  const result = _(blogs).countBy('author').toPairs().maxBy(_.last)
+  const result = _(blogs).countBy('author').toPairs().maxBy(_.last())
 
   return { author: result[0], blogs: result[1] }
 }
 
-module.exports = { totalLikes, favoriteBlog, mostBlogs }
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return undefined
+
+  const reducer = (previousValue, currentValue) =>
+    previousValue + currentValue.likes
+
+  const result = _(blogs)
+    .groupBy('author')
+    .map((authorBlogs) => {
+      const likes = authorBlogs.reduce(reducer, 0)
+      return { author: authorBlogs[0].author, likes: likes }
+    })
+    .maxBy('likes')
+  return result
+}
+
+module.exports = { totalLikes, favoriteBlog, mostBlogs, mostLikes }

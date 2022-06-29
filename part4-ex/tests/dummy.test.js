@@ -113,3 +113,13 @@ describe('top bloggers', () => {
     })
   })
 })
+
+describe('top likes', () => {
+  test('of big list is accurate', () => {
+    const result = listHelper.mostLikes(blogs)
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17,
+    })
+  })
+})
